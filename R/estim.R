@@ -21,11 +21,13 @@ estim <- function(Y, K, tol=1e-5, verbose=TRUE) {
     th <- update_b(Y, K, th)
     ll_new <- loglik(Y, th)
     rel_improve <- (ll_new - ll_old) / abs(ll_old)
-    if (verbose) cat(sprintf("step %d: relative improvement %f\n", i, rel_improve))
+    if (verbose) cat(paste0("step ",i,": relative improvement ",
+                            formatC(rel_improve, format="e", digits=2), "\n"))
     if (rel_improve < tol) break
     ll_old <- ll_new
     i <- i+1
   }
+  dimnames(th) <- dimnames(Y)
   th
 }
 
@@ -40,16 +42,22 @@ theta2plist <- function(theta, K) {
   th_m <- mean(theta)
   p <- theta - th_m
   th_rm <- rowMeans(p)
+  names(th_rm) <- rownames(theta)
   p <- p - th_rm
   th_cm <- colMeans(p)
+  names(th_cm) <- colnames(theta)
   p <- p - rep(th_cm, each=nrow(theta))
   svd_res <- svdK(p, K)
+  u <- svd_res$u
+  rownames(u) <- rownames(theta)
+  v <- svd_res$v
+  rownames(v) <- colnames(theta)
   list(th_m=th_m,
        th_rm=th_rm,
        th_cm=th_cm,
-       u=svd_res$u,
+       u=u,
        d=svd_res$d,
-       v=svd_res$v)
+       v=v)
 }
 
 #' Combine a list of parameter vectors to the parameter matrix.
