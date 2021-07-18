@@ -11,6 +11,12 @@ estim(Y, K, tol = 1e-05, verbose = TRUE)
 different documents.}
 
 \item{K}{A positive integer. The rank of the normalized parameter matrix.}
+
+\item{tol}{A positive double. Stop iterative optimization of log-likelihood
+(ll) if improvement is less than tol*ll.}
+
+\item{verbose}{A logical value. Should progress messages be printed on the
+console.}
 }
 \value{
 A n x d matrix. Contains the logs of the Poisson parameters.

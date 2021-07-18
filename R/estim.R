@@ -3,6 +3,10 @@
 #' @param Y A n x d matrix containing words counts for n different words and d
 #'   different documents.
 #' @param K A positive integer. The rank of the normalized parameter matrix.
+#' @param tol A positive double. Stop iterative optimization of log-likelihood
+#'   (ll) if improvement is less than tol*ll.
+#' @param verbose A logical value. Should progress messages be printed on the
+#'   console.
 #' @return A n x d matrix. Contains the logs of the Poisson parameters.
 #' @export
 estim <- function(Y, K, tol=1e-5, verbose=TRUE) {

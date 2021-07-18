@@ -6,10 +6,8 @@ step1_newton_pois <- function(X, y, offset=0, coef) {
   grad <- (y-mu) %*% X
   dim(grad) <- NULL
   hess <- crossprod(X*mu, X)
-  s <- .Internal(La_solve(
-    hess + diag(nrow(hess))*max(abs(hess))*1e-14,
-    grad,
-    .Machine$double.eps))
+  hess_stable <- hess + diag(nrow(hess))*max(abs(hess))*1e-14
+  s <- .Internal(La_solve(hess_stable, grad, .Machine$double.eps))
 
   stp_sz <- 1 # start with step size 1
   ll_old <- mean(-exp(eta) + y*eta)
