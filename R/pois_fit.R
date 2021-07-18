@@ -1,4 +1,5 @@
-poi_fit1_newton_linesearch <- function(X, y, offset=0, coef, step_size=0.1) {
+# make one step of newton method for fitting to a Poisson model
+step1_newton_pois <- function(X, y, offset=0, coef) {
   eta <- X %*% coef + offset # eta < -708.3964 or eta  > 709.7827 makes mu Inf
   dim(eta) <- NULL
   mu <- exp(eta)
@@ -10,7 +11,7 @@ poi_fit1_newton_linesearch <- function(X, y, offset=0, coef, step_size=0.1) {
     grad,
     .Machine$double.eps))
 
-  stp_sz <- step_size
+  stp_sz <- 1 # start with step size 1
   ll_old <- mean(-exp(eta) + y*eta)
   while (TRUE) {
     res <- coef + stp_sz * s
