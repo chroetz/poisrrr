@@ -1,3 +1,10 @@
+#' Estimate Poisson parameter matrix with reduced rank.
+#'
+#' @param Y A n x d matrix containing words counts for n different words and d
+#'   different documents.
+#' @param K A positive integer. The rank of the normalized parameter matrix.
+#' @return A n x d matrix. Contains the logs of the Poisson parameters.
+#' @export
 estim <- function(Y, K, tol=1e-5, verbose=TRUE) {
   theta <- log(Y)
   theta[!is.finite(theta)] <- -2 # set log(0) to -2
@@ -18,6 +25,13 @@ estim <- function(Y, K, tol=1e-5, verbose=TRUE) {
   th
 }
 
+#' Extract parameter vectors from parameter matrix.
+#'
+#' @param theta A n x d matrix. The logs of the Poisson parameteres.
+#' @param K A positive integer. The rank of the normalized parameter matrix.
+#' @return A list containing the normalizing values and the SVD of the
+#'   normalized matrix.
+#' @export
 theta2plist <- function(theta, K) {
   th_m <- mean(theta)
   p <- theta - th_m
@@ -34,6 +48,11 @@ theta2plist <- function(theta, K) {
        v=svd_res$v)
 }
 
+#' Combine a list of parameter vectors to the parameter matrix.
+#'
+#' @param plist A list of parameter vectors as returned by theta2plist().
+#' @return A n x d matrix. Contains the logs of the Poisson parameters.
+#' @export
 plist2theta <- function(plist) {
   K <- length(plist$d)
   J <- length(plist$th_rm)
@@ -43,6 +62,13 @@ plist2theta <- function(plist) {
   theta
 }
 
+#' Log-likelihood
+#'
+#' @param Y A n x d matrix containing words counts for n different words and d
+#'   different documents.
+#' @param theta A n x d matrix. The logs of the Poisson parameteres.
+#' @return A number. The Log-likelihood.
+#' @export
 loglik <- function(Y, theta) {
   mean(-exp(theta) + Y*theta)
 }
