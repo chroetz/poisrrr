@@ -1,15 +1,29 @@
 Package: poisrrr
-Title: What the Package Does (One Line, Title Case)
+Title: Poisson Reduced-Rank Models
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    c(
+    person(given = "Christof",
+           family = "Schötz",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+           email = "schoetz@math.uni-heidelberg.de"),
+    person(given = "Eun Ryung",
+           family = "Lee",
+           role = c("aut"),
+           email = "erlee@skku.edu"),
+    person(given = "Carsten",
+           family = " Jentsch",
+           role = c("aut"),
+           email = "jentsch@statistik.tu-dortmund.de"),
+    person(given = "Enno",
+           family = "Mammen",
+           role = c("aut"),
+           email = "mammen@math.uni-heidelberg.de")
+    )
+Description: Implements algorithms to fit the Poisson reduced-rank models of C. 
+    Jentsch, E. Mammen and E. R. Lee (2020) Poisson reduced rank models with an 
+    application to political text data. Biometrika.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
