@@ -4,7 +4,7 @@
 \alias{estim}
 \title{Estimate Poisson parameter matrix with reduced rank.}
 \usage{
-estim(Y, K, tol = 1e-05, verbose = TRUE)
+estim(Y, K, verbose = TRUE, tol = 1e-05, max_iter = 100, return_list = FALSE)
 }
 \arguments{
 \item{Y}{A n x d matrix containing words counts for n different words and d
@@ -12,14 +12,22 @@ different documents.}
 
 \item{K}{A positive integer. The rank of the normalized parameter matrix.}
 
+\item{verbose}{A logical value. Should progress messages be printed on the
+console?}
+
 \item{tol}{A positive double. Stop iterative optimization of log-likelihood
 (ll) if improvement is less than tol*ll.}
 
-\item{verbose}{A logical value. Should progress messages be printed on the
-console.}
+\item{max_iter}{A positive integer. Stop iterative optimization of
+log-likelihood after max_iter iterations.}
+
+\item{return_list}{A logical value or a numeric vector. Should a list of
+parameter matrices for each iteration (or all iterations with number in
+return_list) be returned or just the last?}
 }
 \value{
-A n x d matrix. Contains the logs of the Poisson parameters.
+A n x d matrix or a list of such matrices. A matrix contains the logs
+of the Poisson parameters.
 }
 \description{
 Estimate Poisson parameter matrix with reduced rank.

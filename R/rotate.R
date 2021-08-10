@@ -25,7 +25,7 @@ rotate_fit_objective <- function(alpha, v, v_b) {
 rotate_fit <- function(v_b, v) {
   n1 <- ncol(v)-1
   gmin <- optim(rep(pi, (n1+1)*n1/2), rotate_fit_objective,
-                method = "L-BFGS-B", lower=rep(0, n1), upper=rep(2*pi, n1), v=v, v_b=v_b)
+                method = "L-BFGS-B", lower=0, upper=2*pi, v=v, v_b=v_b)
   rotate(gmin$par , v_b)
 }
 

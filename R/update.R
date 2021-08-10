@@ -3,13 +3,18 @@ svdK <- function (x, K) {
   n <- nrow(x)
   p <- ncol(x)
   np <- min(n, p)
-  u <- matrix(0, n, np)
-  vt <- matrix(0, np, p)
-  res <- .Internal(La_svd("S", x, double(np), u, vt))
-  res$d <- res$d[seq_len(K)]
-  res$u <- res$u[, seq_len(K), drop = FALSE]
-  res$v <- t(res$vt[seq_len(K), , drop = FALSE])
-  res$vt <- NULL
+  K <- min(np, K)
+  if (np > 100) {# TODO
+    res <- rsvd::rsvd(x, k=K, q=2, p=10)
+  } else {
+    u <- matrix(0, n, np)
+    vt <- matrix(0, np, p)
+    res <- .Internal(La_svd("S", x, double(np), u, vt))
+    res$d <- res$d[seq_len(K)]
+    res$u <- res$u[, seq_len(K), drop = FALSE]
+    res$v <- t(res$vt[seq_len(K), , drop = FALSE])
+    res$vt <- NULL
+  }
   res
 }
 

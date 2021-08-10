@@ -5,27 +5,43 @@
 #' @param K A positive integer. The rank of the normalized parameter matrix.
 #' @param tol A positive double. Stop iterative optimization of log-likelihood
 #'   (ll) if improvement is less than tol*ll.
+#' @param max_iter A positive integer. Stop iterative optimization of
+#'   log-likelihood after max_iter iterations.
 #' @param verbose A logical value. Should progress messages be printed on the
-#'   console.
-#' @return A n x d matrix. Contains the logs of the Poisson parameters.
+#'   console?
+#' @param return_list A logical value or a numeric vector. Should a list of
+#'   parameter matrices for each iteration (or all iterations with number in
+#'   return_list) be returned or just the last?
+#' @return A n x d matrix or a list of such matrices. A matrix contains the logs
+#'   of the Poisson parameters.
 #' @export
-estim <- function(Y, K, tol=1e-5, verbose=TRUE) {
+estim <- function(Y, K, verbose=TRUE, tol=1e-5, max_iter=100, return_list=FALSE) {
   theta <- log(Y)
   theta[!is.finite(theta)] <- -2 # set log(0) to -2
   r <- theta2plist(theta, K)
   th <- plist2theta(r)
+  if (!isFALSE(return_list)) th_list <- list(th)
   ll_old <- loglik(Y, th)
   i <- 1
   while(TRUE) {
     th <- update_f(Y, K, th)
     th <- update_b(Y, K, th)
+    if (isTRUE(return_list) || i %in% return_list) th_list <- c(th_list, list(th))
     ll_new <- loglik(Y, th)
     rel_improve <- (ll_new - ll_old) / abs(ll_old)
-    if (verbose) cat(paste0("step ",i,": relative improvement ",
-                            formatC(rel_improve, format="e", digits=2), "\n"))
+    if (verbose)
+      cat(paste0(sprintf("#%03d: ",i),
+                 "loglik ", formatC(ll_new, format="e", digits=4), ", ",
+                 "rel_gain ", formatC(rel_improve, format="e", digits=2),
+                 "\n"))
     if (rel_improve < tol) break
     ll_old <- ll_new
     i <- i+1
+    if (i > max_iter) break
+  }
+  if (!isFALSE(return_list)) {
+    return(
+      lapply(th_list, function(th) {dimnames(th) <- dimnames(Y); th}))
   }
   dimnames(th) <- dimnames(Y)
   th
