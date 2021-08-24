@@ -30,7 +30,7 @@ remotes::install_github("chroetz/poisrrr")
 Create a Term-Document-Matrix form quanteda's inaugural address corpus.
 
 ```{r}
-library(tidyverse)
+library(magrittr)
 quanteda::data_corpus_inaugural %>% 
   quanteda::tokens(remove_punct = TRUE, remove_symbols = TRUE, remove_numbers = TRUE) %>% 
   quanteda::dfm(verbose = FALSE) %>% 
@@ -41,7 +41,7 @@ tdm <- tdm[rowSums(tdm) > 5, ] # remove rare words
 ```
 
 
-Apply the method in for Dimension 2 and plot the resulting plane of documents.
+Apply the method for $K=2$ dimensions and plot the resulting plane with document positions.
 
 ```{r}
 library(poisrrr)
@@ -52,7 +52,9 @@ v <- lst$v
 plot(NA, xlim=c(-0.2, 0.22), ylim=c(-0.3, 0.25), xlab="Dimension 1", ylab="Dimension 2")
 points(v)
 lines(v)
-text(v, labels=rownames(v), cex=0.8, pos=3, offset=0.2)
+labels <- rownames(v)
+labels[-c(1,4,7,19,20,22,29,32,33,37,38,39,40,46,55,56,58)] <- NA
+text(v, labels=labels, cex=0.8, pos=3, offset=0.2)
 ```
 
 

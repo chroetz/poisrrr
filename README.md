@@ -27,15 +27,7 @@ remotes::install_github("chroetz/poisrrr")
 Create a Term-Document-Matrix form quanteda’s inaugural address corpus.
 
 ``` r
-library(tidyverse)
-#> -- Attaching packages --------------------------------------- tidyverse 1.3.1 --
-#> v ggplot2 3.3.5     v purrr   0.3.4
-#> v tibble  3.1.3     v dplyr   1.0.7
-#> v tidyr   1.1.3     v stringr 1.4.0
-#> v readr   2.0.0     v forcats 0.5.1
-#> -- Conflicts ------------------------------------------ tidyverse_conflicts() --
-#> x dplyr::filter() masks stats::filter()
-#> x dplyr::lag()    masks stats::lag()
+library(magrittr)
 quanteda::data_corpus_inaugural %>% 
   quanteda::tokens(remove_punct = TRUE, remove_symbols = TRUE, remove_numbers = TRUE) %>% 
   quanteda::dfm(verbose = FALSE) %>% 
@@ -45,8 +37,8 @@ quanteda::data_corpus_inaugural %>%
 tdm <- tdm[rowSums(tdm) > 5, ] # remove rare words
 ```
 
-Apply the method in for Dimension 2 and plot the resulting plane of
-documents.
+Apply the method for *K* = 2 dimensions and plot the resulting plane
+with document positions.
 
 ``` r
 library(poisrrr)
@@ -57,7 +49,9 @@ v <- lst$v
 plot(NA, xlim=c(-0.2, 0.22), ylim=c(-0.3, 0.25), xlab="Dimension 1", ylab="Dimension 2")
 points(v)
 lines(v)
-text(v, labels=rownames(v), cex=0.8, pos=3, offset=0.2)
+labels <- rownames(v)
+labels[-c(1,4,7,19,20,22,29,32,33,37,38,39,40,46,55,56,58)] <- NA
+text(v, labels=labels, cex=0.8, pos=3, offset=0.2)
 ```
 
 <img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
