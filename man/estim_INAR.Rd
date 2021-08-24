@@ -16,13 +16,14 @@ estim_INAR(
 \item{Y}{A n x d matrix containing token counts for n different tokens and d
 different documents.}
 
-\item{theta}{A n x d matrix. The logs of the Poisson parameteres.}
+\item{theta}{A n x d matrix. The logs of the Poisson parameters.}
 
-\item{group}{.}
+\item{group}{A character vector of length n for grouping.}
 
-\item{time}{.}
+\item{time}{A numeric vector of length n to order elements by time.}
 
-\item{ids}{.}
+\item{row_ids}{A index vector of length n mapping the ordering of group and
+time to the ordering in the rows of theta.}
 }
 \value{
 A named list with INAR parameters for each group.

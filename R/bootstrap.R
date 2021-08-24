@@ -1,14 +1,14 @@
 #' Estimate the parameters of the INAR model for one token
 #'
-#' @param y counts of word for each point in time
-#' @param theta parameter vector for word for each point in time
+#' @param y counts of a token for each point in time
+#' @param theta parameter vector for the token for each point in time
 estim_INAR_token <- function(y, theta) {
   m  <- length(y) # number of points in time
   mu <- exp(theta)
   delta <- mu[2:m] - mu[1:(m-1)]
-  b  <- 10^8 # TODO: check: what value here?
+  b  <- 10^8 # Value is arbitrarily set.
   a <- max(c(0, delta))
-  minf <- optimize(inar_objective, lower=a, upper=b, y=y, mu=mu)
+  minf <- stats::optimize(inar_objective, lower=a, upper=b, y=y, mu=mu)
   gamma <- minf$minimum
   eta <- mu[2:m] / (mu[1:(m-1)] + gamma)
   return(c(gamma, eta))
@@ -37,10 +37,11 @@ estim_INAR_group <- function(y, th) {
 #'
 #' @param Y A n x d matrix containing token counts for n different tokens and d
 #'   different documents.
-#' @param theta A n x d matrix. The logs of the Poisson parameteres.
-#' @param group .
-#' @param time .
-#' @param ids .
+#' @param theta A n x d matrix. The logs of the Poisson parameters.
+#' @param group A character vector of length n for grouping.
+#' @param time A numeric vector of length n to order elements by time.
+#' @param row_ids A index vector of length n mapping the ordering of group and
+#'   time to the ordering in the rows of theta.
 #' @return A named list with INAR parameters for each group.
 #' @export
 estim_INAR <- function(Y, theta,
@@ -76,14 +77,14 @@ boot_sample <- function(Y, boot_param) {
     ids <- colnames(p$mu)
     m <- length(ids)
 
-    Y_new[, ids[1]] <- rpois(n, p$mu[, ids[1]])
+    Y_new[, ids[1]] <- stats::rpois(n, p$mu[, ids[1]])
     if (m==1) next
 
     pois_omega <- p$omega
-    pois_omega[] <- rpois(length(p$omega), p$omega)
+    pois_omega[] <- stats::rpois(length(p$omega), p$omega)
     for (t in 2:m) {
       id_jt <- ids[t]
-      xi <- rbinom(nrow(Y_new), size=Y_new[, ids[t-1]], prob=p$eta[, id_jt])
+      xi <- stats::rbinom(nrow(Y_new), size=Y_new[, ids[t-1]], prob=p$eta[, id_jt])
       z_ijt <- pois_omega[, id_jt]
       Y_new[, id_jt] <- xi + z_ijt
     }

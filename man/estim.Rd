@@ -7,7 +7,7 @@
 estim(Y, K, verbose = TRUE, tol = 1e-05, max_iter = 100, return_list = FALSE)
 }
 \arguments{
-\item{Y}{A n x d matrix containing words counts for n different words and d
+\item{Y}{A n x d matrix containing token counts for n different tokens and d
 different documents.}
 
 \item{K}{A positive integer. The rank of the normalized parameter matrix.}

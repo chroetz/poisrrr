@@ -1,6 +1,6 @@
 #' Estimate Poisson parameter matrix with reduced rank.
 #'
-#' @param Y A n x d matrix containing words counts for n different words and d
+#' @param Y A n x d matrix containing token counts for n different tokens and d
 #'   different documents.
 #' @param K A positive integer. The rank of the normalized parameter matrix.
 #' @param tol A positive double. Stop iterative optimization of log-likelihood
@@ -92,9 +92,9 @@ plist2theta <- function(plist) {
 
 #' Log-likelihood
 #'
-#' @param Y A n x d matrix containing words counts for n different words and d
+#' @param Y A n x d matrix containing token counts for n different tokens and d
 #'   different documents.
-#' @param theta A n x d matrix. The logs of the Poisson parameteres.
+#' @param theta A n x d matrix. The logs of the Poisson parameters.
 #' @return A number. The Log-likelihood.
 #' @export
 loglik <- function(Y, theta) {

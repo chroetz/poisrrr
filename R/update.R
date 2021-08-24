@@ -4,12 +4,10 @@ svdK <- function (x, K) {
   p <- ncol(x)
   np <- min(n, p)
   K <- min(np, K)
-  if (np > 100) {# TODO
+  if (np > 100) {# This threshold is arbitrary.
     res <- rsvd::rsvd(x, k=K, q=2, p=10)
   } else {
-    u <- matrix(0, n, np)
-    vt <- matrix(0, np, p)
-    res <- .Internal(La_svd("S", x, double(np), u, vt))
+    res <- La.svd(x)
     res$d <- res$d[seq_len(K)]
     res$u <- res$u[, seq_len(K), drop = FALSE]
     res$v <- t(res$vt[seq_len(K), , drop = FALSE])

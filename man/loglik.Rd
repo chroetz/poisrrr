@@ -7,10 +7,10 @@
 loglik(Y, theta)
 }
 \arguments{
-\item{Y}{A n x d matrix containing words counts for n different words and d
+\item{Y}{A n x d matrix containing token counts for n different tokens and d
 different documents.}
 
-\item{theta}{A n x d matrix. The logs of the Poisson parameteres.}
+\item{theta}{A n x d matrix. The logs of the Poisson parameters.}
 }
 \value{
 A number. The Log-likelihood.

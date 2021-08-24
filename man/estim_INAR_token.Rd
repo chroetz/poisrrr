@@ -7,9 +7,9 @@
 estim_INAR_token(y, theta)
 }
 \arguments{
-\item{y}{counts of word for each point in time}
+\item{y}{counts of a token for each point in time}
 
-\item{theta}{parameter vector for word for each point in time}
+\item{theta}{parameter vector for the token for each point in time}
 }
 \description{
 Estimate the parameters of the INAR model for one token
