@@ -32,20 +32,26 @@ rotate_fit_objective <- function(alpha, v, v_b) {
 rotate_fit <- function(x, target) {
   n1 <- ncol(target)-1
   # optimize wrt det 1 matrices
-  gmin_pos <- stats::optim(
-    rep(pi, (n1+1)*n1/2),
-    rotate_fit_objective,
-    method = "L-BFGS-B",
-    lower=0, upper=2*pi,
-    v=target, v_b=x)
+  gmin_poss <- lapply(
+    c(pi/2, pi, 1.5*pi),
+    \(strt) stats::optim(
+      rep(strt, (n1+1)*n1/2),
+      rotate_fit_objective,
+        method = "L-BFGS-B",
+      lower=0, upper=2*pi,
+      v=target, v_b=x))
+  gmin_pos <- gmin_poss[[which.min(sapply(gmin_poss, \(res) res$value))]]
   # optimize wrt det -1 matrices
   v_b_neg <- x %*% diag(c(-1, rep(1, n1)))
-  gmin_neg <- stats::optim(
-    rep(pi, (n1+1)*n1/2),
-    rotate_fit_objective,
-    method = "L-BFGS-B",
-    lower=0, upper=2*pi,
-    v=target, v_b=v_b_neg)
+  gmin_negs <- lapply(
+    c(pi/2, pi, 1.5*pi),
+    \(strt) stats::optim(
+      rep(strt, (n1+1)*n1/2),
+      rotate_fit_objective,
+      method = "L-BFGS-B",
+      lower=0, upper=2*pi,
+      v=target, v_b=v_b_neg))
+  gmin_neg <- gmin_negs[[which.min(sapply(gmin_negs, \(res) res$value))]]
   if (gmin_pos$value <= gmin_neg$value) {
     return(rotate(gmin_pos$par, x))
   }
